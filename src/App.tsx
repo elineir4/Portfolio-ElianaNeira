@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WebGLBackground from "./components/WebGLBackground";
 import SplitText from "./components/SplitText";
+import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,6 +62,7 @@ function Cursor() {
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
 function Nav() {
+  const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [active, setActive] = useState("home");
@@ -78,10 +80,10 @@ function Nav() {
   };
 
   const links = [
-    { id: "home", label: "Home" },
-    { id: "projects", label: "Proyectos" },
-    { id: "skills", label: "Tecnologías" },
-    { id: "contact", label: "Contacto" },
+    { id: "home", label: t.nav.home },
+    { id: "projects", label: t.nav.projects },
+    { id: "skills", label: t.nav.skills },
+    { id: "contact", label: t.nav.contact },
   ];
 
   return (
@@ -119,8 +121,15 @@ function Nav() {
             onClick={() => scrollTo("contact")}
             className="hidden md:inline-flex items-center gap-2 border border-crimson text-crimson font-label-sm text-xs px-6 py-3 hover:bg-crimson hover:text-white transition-all duration-300 uppercase tracking-widest hover-target group"
           >
-            Hablemos
-            <Icon name="arrow_forward" size="14px" className="group-hover:translate-x-1 transition-transform" />
+            {t.nav.talk}
+          </button>
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={language === "es" ? "Switch to English" : "Cambiar a español"}
+            className="font-label-sm text-xs tracking-widest text-white hover:text-crimson transition-colors hover-target"
+          >
+            {language === "es" ? "EN" : "ES"}
           </button>
           <button
             className="md:hidden text-white hover:text-crimson transition-colors"
@@ -150,7 +159,8 @@ function Nav() {
 
 // ─── Marquee ─────────────────────────────────────────────────────────────────
 function Marquee() {
-  const items = ["PROYECTOS DESTACADOS", "DESARROLLO WEB", "CÓDIGO CON PROPÓSITO", "SOLUCIONES DIGITALES", "DESARROLLADORA"];
+  const { t } = useLanguage();
+  const items = t.marquee;
   const row = [...items, ...items, ...items];
   return (
     <div className="marquee-container overflow-hidden">
@@ -170,60 +180,27 @@ function Marquee() {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function Hero() {
-  const portraitRef = useRef<HTMLDivElement>(null);
-  const bgTextRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    // 3D portrait tilt via cursor
-    const portrait = portraitRef.current;
-    if (!portrait) return;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = portrait.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / (window.innerWidth / 2);
-      const dy = (e.clientY - cy) / (window.innerHeight / 2);
-      gsap.to(portrait, {
-        rotateY: dx * 14,
-        rotateX: -dy * 10,
-        duration: 0.6,
-        ease: "power2.out",
-        transformPerspective: 900,
-        transformOrigin: "center center",
-      });
-    };
-    const onLeave = () => {
-      gsap.to(portrait, { rotateY: 0, rotateX: 0, duration: 1, ease: "elastic.out(1, 0.5)" });
-    };
-    window.addEventListener("mousemove", onMove);
-    portrait.addEventListener("mouseleave", onLeave);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      portrait.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
+  const { t } = useLanguage();
 
   return (
     <section
       id="home"
       className="relative flex items-center justify-center overflow-x-clip pt-28 pb-16 px-5 md:px-12 lg:px-16"
     >
-      <div className="relative z-10 w-full max-w-container-max mx-auto min-h-[690px] lg:h-[580px] overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#151515] via-[#0e0e0e] to-[#080808] shadow-2xl flex flex-col items-center justify-center text-center lg:block">
-        <div className="absolute top-7 left-7 right-7 lg:top-8 lg:left-10 lg:right-10 flex items-start justify-between font-label-sm text-[9px] tracking-[0.2em] text-white/80 uppercase">
-          <div className="flex flex-col gap-1 text-left">
-            <span>DESARROLLADORA FULL STACK</span>
-            <span className="text-white/40">DESARROLLADORA DIGITAL</span>
+      <div className="relative z-10 w-full max-w-container-max mx-auto min-h-[720px] lg:h-[580px] overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#151515] via-[#0e0e0e] to-[#080808] shadow-2xl flex flex-col items-center justify-center text-center lg:block">
+        <div className="absolute top-7 left-5 right-5 lg:top-8 lg:left-10 lg:right-10 flex flex-col items-center gap-3 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left font-label-sm text-[9px] tracking-[0.2em] text-white/80 uppercase">
+          <div className="flex flex-col items-center gap-1 text-center lg:items-start lg:text-left">
+            <span>{t.hero.role}</span>
+            <span className="text-white/60">{t.hero.digital}</span>
           </div>
-          <span className="flex items-center gap-2">
-            DISPONIBLE PARA PROYECTOS Y OPORTUNIDADES
+          <span className="flex max-w-full items-center justify-center gap-2 border border-crimson/30 bg-crimson/10 px-3 py-2 text-center lg:max-w-none lg:self-auto lg:justify-end lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:text-right">
+            {t.hero.availability}
             <span className="text-crimson text-lg leading-none">+</span>
           </span>
         </div>
 
         {/* Giant BG word */}
         <h1
-          ref={bgTextRef}
           className="hidden lg:block font-hero leading-none text-crimson/20 uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[94%] text-center whitespace-nowrap z-0 select-none pointer-events-none"
           style={{ fontSize: "clamp(6rem, 16vw, 16rem)", WebkitTextStroke: "1px rgba(139,26,43,0.2)" }}
         >
@@ -231,26 +208,11 @@ function Hero() {
         </h1>
 
         {/* Portrait */}
-        <div
-          ref={portraitRef}
-          className="hidden lg:block relative z-10 w-64 h-[380px] mt-16 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:bottom-0 lg:w-[min(36vw,33rem)] lg:h-[560px] lg:mt-0"
-          style={{ willChange: "transform" }}
-        >
-          <img
-            src="/images/eliana.png"
-            alt="Retrato de Eliana"
-            className="hero-image h-full object-top drop-shadow-2xl grayscale"
-            style={{
-              filter: "contrast(1.05) brightness(0.92)",
-            }}
-          />
-        </div>
-
         {/* Text block */}
-        <div className="relative z-20 mt-8 px-7 lg:absolute lg:left-10 lg:bottom-0 lg:-translate-y-3 lg:mt-0 lg:px-0 flex flex-col items-center lg:items-start gap-1 text-center lg:text-left w-full lg:w-[36%]">
+        <div className="relative z-20 mt-24 px-5 sm:px-7 lg:absolute lg:left-10 lg:bottom-0 lg:-translate-y-3 lg:mt-0 lg:px-0 flex flex-col items-center lg:items-start gap-1 text-center lg:text-left w-full lg:w-[36%]">
           <div className="w-full overflow-hidden">
             <SplitText
-              text="Hola, soy"
+              text={t.hero.greeting}
               as="h2"
               className="font-sub-hero text-2xl lg:text-3xl font-semibold italic text-crimson tracking-tight block text-center lg:text-left"
               delay={0.1}
@@ -261,37 +223,42 @@ function Hero() {
             <SplitText
               text="ELIANA"
               as="h3"
-              className="font-hero text-5xl lg:text-7xl xl:text-8xl leading-[0.8] font-bold text-white tracking-tight block text-center lg:text-left whitespace-nowrap"
+              className="font-hero text-4xl sm:text-5xl lg:text-7xl xl:text-8xl leading-[0.8] font-bold text-white tracking-tight block text-center lg:text-left whitespace-nowrap"
               delay={0.5}
               stagger={0.015}
             />
           </div>
           <div className="w-full overflow-hidden">
             <SplitText
-              text="DESARROLLADORA FULL STACK"
+              text={t.hero.role}
               as="h3"
-              className="font-hero text-3xl lg:text-5xl xl:text-6xl leading-[0.9] font-bold text-white tracking-tight block text-center lg:text-left whitespace-normal"
+              className="font-hero text-2xl sm:text-3xl lg:text-5xl xl:text-6xl leading-[0.9] font-bold text-white tracking-tight block text-center lg:text-left whitespace-normal"
               delay={0.5}
               stagger={0.015}
             />
           </div>
-          <div className="hero-loc mt-2 flex items-center justify-center lg:justify-start gap-2 font-label-sm text-[9px] text-white/40 uppercase tracking-widest opacity-0">
+          <div className="hero-loc mt-2 flex items-center justify-center lg:justify-start gap-2 font-label-sm text-[9px] text-white/60 uppercase tracking-widest opacity-0">
             <Icon name="location_on" fill={1} size="14px" className="text-crimson" />
-            DESARROLLADORA EN ARGENTINA
+            {t.hero.location}
           </div>
+        </div>
+
+        {/* Mobile portrait */}
+        <div className="hidden lg:block relative z-10 mt-7 h-56 w-44 lg:absolute lg:left-1/2 lg:bottom-0 lg:mt-0 lg:h-[560px] lg:w-[min(36vw,33rem)] lg:-translate-x-1/2">
+          <img
+            src="/images/eliana.png"
+            alt="Retrato de Eliana"
+            className="hero-image h-full object-top drop-shadow-2xl grayscale"
+            style={{ filter: "contrast(1.05) brightness(0.92)" }}
+          />
         </div>
 
         <aside className="relative z-20 mt-10 lg:absolute lg:right-10 lg:bottom-1 lg:mt-0 w-full lg:w-52 text-left px-7 lg:px-0">
           <div className="space-y-4 border-l border-white/10 pl-5">
-            {[
-              "Transformo ideas en experiencias digitales",
-              "Soluciones centradas en las personas",
-              "Interfaces claras y funcionales",
-              "Diseño adaptable a cada dispositivo",
-            ].map((feature) => (
+            {t.hero.features.map((feature) => (
               <div key={feature} className="flex items-start gap-3">
                 <span className="font-label-sm text-crimson text-base leading-none">+</span>
-                <span className="font-body-md text-xs leading-relaxed text-white/55">{feature}</span>
+                <span className="font-body-md text-xs leading-relaxed text-white/70">{feature}</span>
               </div>
             ))}
           </div>
@@ -300,7 +267,7 @@ function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 scroll-bounce">
-        <span className="font-label-sm text-[10px] tracking-[0.3em] uppercase">Desplazar</span>
+        <span className="font-label-sm text-[10px] tracking-[0.3em] uppercase">{t.hero.scroll}</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-white/60 to-transparent" />
       </div>
     </section>
@@ -310,35 +277,37 @@ function Hero() {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 const PROJECTS = [
   {
-    id: "01", title: "DON SPIEDO", category: "Sitio web para rotisería", span: "lg:col-span-8",
+    id: "01", span: "lg:col-span-8",
     img: "/images/Screenshot 2026-09-02 111111.png",
     github: "https://github.com/elineir4/Rotiseria-Don-Spiedo",
-    tags: ["HTML", "CSS", "JavaScript"], heroH: "h-64 md:h-[420px]",
+    heroH: "h-64 md:h-[420px]",
   },
   {
-    id: "02", title: "TIENDA DE ROPA", category: "E-commerce web", span: "lg:col-span-4",
+    id: "02", span: "lg:col-span-4",
     img: "/images/Screenshot 2026-09-02 111016.png",
     github: "https://github.com/elineir4/Scotch-Road",
-    tags: ["HTML", "CSS", "JavaScript"], heroH: "h-64 md:h-[420px]",
+    heroH: "h-64 md:h-[420px]",
   },
   {
-    id: "03", title: "MUNDO RUTA", category: "Proyecto grupal en C#", span: "lg:col-span-5",
+    id: "03", span: "lg:col-span-5",
     img: "/images/108c984febcd771d13f4774865e8940a.jpg",
     github: "https://github.com/juampimedina06/mundo-ruta",
-    tags: ["C#", ".NET", "Trabajo grupal"], heroH: "h-64 md:h-80",
+    heroH: "h-64 md:h-80",
   },
   {
-    id: "04", title: "AN INSTALACIONES", category: "Proyecto personal en C#", span: "lg:col-span-7",
+    id: "04", span: "lg:col-span-7",
     img: "/images/WhatsApp Image 2026-08-31 at 22.24.03.jpeg",
     github: "https://github.com/elineir4/AN-Instalaciones",
-    tags: ["C#", ".NET", "Aplicación web"], heroH: "h-64 md:h-80",
+    heroH: "h-64 md:h-80",
   },
 ];
 
 function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
+  const project = t.projects.items[p.id as keyof typeof t.projects.items];
+  const cardRef = useRef<HTMLAnchorElement>(null);
 
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = cardRef.current!.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
@@ -381,17 +350,17 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
         <div className="flex justify-between items-end">
           <div>
             <div className="flex gap-2 mb-3 flex-wrap">
-              {p.tags.map((tag) => (
+              {project.tags.map((tag) => (
                 <span key={tag} className="font-label-sm text-[10px] text-crimson/70 border border-crimson/20 px-2 py-0.5 uppercase tracking-widest">
                   {tag}
                 </span>
               ))}
             </div>
-            <span className="font-label-sm text-white/40 uppercase tracking-widest block mb-1 text-[10px]">
-              {p.category}
+            <span className="font-label-sm text-white/60 uppercase tracking-widest block mb-1 text-[10px]">
+              {project.category}
             </span>
             <h3 className="font-sub-hero text-2xl md:text-4xl font-bold text-white group-hover:text-crimson transition-colors duration-300">
-              {p.title}
+              {project.title}
             </h3>
           </div>
           <span className="font-hero text-5xl md:text-7xl text-white/[0.06] font-bold group-hover:text-crimson/20 transition-colors duration-300 leading-none">
@@ -409,6 +378,7 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
 }
 
 function Projects() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -435,14 +405,14 @@ function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+      className="w-full max-w-container-max mx-auto py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop"
     >
       <div className="flex justify-between items-end mb-14 border-b border-white/5 pb-8 overflow-hidden">
         <div>
-          <p className="font-label-sm text-xs text-crimson tracking-[0.3em] uppercase mb-4">Trabajo seleccionado</p>
+          <p className="font-label-sm text-xs text-crimson tracking-[0.3em] uppercase mb-4">{t.projects.eyebrow}</p>
           <h2 className="font-sub-hero text-5xl md:text-7xl font-bold text-white uppercase leading-[0.9]">
-            Mis<br />
-            <span className="text-crimson">proyectos</span>
+            {t.projects.headingFirst}<br />
+            <span className="text-crimson">{t.projects.headingSecond}</span>
           </h2>
         </div>
       </div>
@@ -456,7 +426,7 @@ function Projects() {
   );
 }
 
-// ─── Skills & Process ─────────────────────────────────────────────────────────
+// ─── Skills & Education ──────────────────────────────────────────────────────
 const SKILLS = [
   { label: "HTML", group: "code" },
   { label: "CSS", group: "code" },
@@ -466,15 +436,6 @@ const SKILLS = [
   { label: "ASP.NET", group: "code" },
   { label: "Entity Framework", group: "code" },
   { label: "Blazor", group: "code" },
-];
-
-const PROCESS = [
-  { icon: "manage_search", title: "Entender", desc: "Conozco la necesidad y defino el objetivo principal de cada solución." },
-  { icon: "architecture", title: "Planificar", desc: "Organizo la información, el flujo de trabajo y la arquitectura técnica." },
-  { icon: "code", title: "Desarrollar", desc: "Construyo interfaces y funcionalidades con tecnologías web y .NET." },
-  { icon: "widgets", title: "Integrar", desc: "Conecto la aplicación con datos y servicios usando Entity Framework y APIs." },
-  { icon: "tune", title: "Probar", desc: "Reviso el funcionamiento, mejoro la experiencia y corrijo los detalles necesarios." },
-  { icon: "rocket_launch", title: "Entregar", desc: "Presento una solución mantenible, clara y lista para seguir creciendo." },
 ];
 
 function SkillPill({ label, delay }: { label: string; delay: number }) {
@@ -495,7 +456,7 @@ function SkillPill({ label, delay }: { label: string; delay: number }) {
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="skill-pill inline-block px-4 py-2 border border-white/10 font-label-sm text-white/50 hover:border-crimson hover:text-white hover:bg-crimson/10 transition-colors duration-200 cursor-default text-[10px] uppercase tracking-widest opacity-0"
+      className="skill-pill inline-block px-4 py-2 border border-white/10 font-label-sm text-white/65 hover:border-crimson hover:text-white hover:bg-crimson/10 transition-colors duration-200 cursor-default text-[10px] uppercase tracking-widest opacity-0"
       style={{ transitionDelay: `${delay}ms` }}
     >
       {label}
@@ -504,6 +465,7 @@ function SkillPill({ label, delay }: { label: string; delay: number }) {
 }
 
 function Skills() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -542,76 +504,63 @@ function Skills() {
     <section
       id="skills"
       ref={sectionRef}
-      className="py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop bg-surface-container-lowest/70 border-y border-white/5 relative overflow-hidden"
+      className="w-full py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop bg-surface-container-lowest/70 border-y border-white/5 relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-crimson/4 rounded-full blur-3xl pointer-events-none translate-x-1/2 -translate-y-1/2" />
 
-      <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 md:gap-32 relative z-10">
+      <div className="w-full max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-24 lg:gap-32 relative z-10">
         {/* Left */}
         <div>
-          <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">Capabilities</p>
+          <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.skills.eyebrow}</p>
           <h2 className="section-title font-sub-hero text-4xl md:text-6xl font-bold text-white uppercase mb-12">
-            Mis<br /><span className="text-white/20">tecnologías</span>
+            {t.skills.headingFirst}<br /><span className="text-white/35">{t.skills.headingSecond}</span>
           </h2>
 
           <div className="mb-10">
-            <h3 className="font-label-sm text-[10px] text-white/30 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">Perfil</h3>
+            <h3 className="font-label-sm text-[10px] text-white/50 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">{t.skills.profile}</h3>
             <div className="space-y-6">
-              {[
-                { deg: "Desarrolladora Full Stack", school: "Frontend, backend y bases de datos", year: "01" },
-                { deg: "Enfoque en soluciones .NET", school: "C# · ASP.NET · Blazor · Entity Framework", year: "02" },
-              ].map(({ deg, school, year }) => (
-                <div key={deg} className="flex justify-between items-start border-b border-white/5 pb-5">
+              {t.skills.profileItems.map(({ title, detail }, i) => (
+                <div key={title} className="flex justify-between items-start border-b border-white/5 pb-5">
                   <div>
-                    <span className="font-body-md text-white font-medium block">{deg}</span>
-                    <span className="font-label-sm text-white/30 text-[10px] mt-1 block">{school}</span>
+                    <span className="font-body-md text-white font-medium block">{title}</span>
+                    <span className="font-label-sm text-white/50 text-[10px] mt-1 block">{detail}</span>
                   </div>
-                  <span className="font-label-sm text-crimson text-[10px] shrink-0 ml-6">{year}</span>
+                  <span className="font-label-sm text-crimson text-[10px] shrink-0 ml-6">{String(i + 1).padStart(2, "0")}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div>
-            <h3 className="font-label-sm text-[10px] text-white/30 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">Herramientas</h3>
+            <h3 className="font-label-sm text-[10px] text-white/50 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">{t.skills.tools}</h3>
             <div className="skills-pills flex flex-wrap gap-3">
               {SKILLS.map((s, i) => <SkillPill key={s.label} label={s.label} delay={i * 40} />)}
             </div>
           </div>
         </div>
 
-        {/* Right: Process */}
+        {/* Right: Education */}
         <div>
-          <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">Methodology</p>
+          <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.education.eyebrow}</p>
           <h2 className="section-title font-sub-hero text-4xl md:text-6xl font-bold text-white uppercase mb-12">
-            Mi forma<br /><span className="text-white/20">de trabajar</span>
+            {t.education.headingFirst}<br /><span className="text-white/35">{t.education.headingSecond}</span>
           </h2>
 
           <div className="process-timeline relative border-l border-white/5 ml-5 space-y-0">
-            {PROCESS.map((step, i) => (
-              <div key={step.title} className="process-step relative pl-10 pb-8">
-                {/* Node */}
-                <div className={`absolute left-[-10px] top-0 w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+            {t.education.items.map((item, i) => (
+              <div key={item.title} className="process-step relative pl-10 pb-10">
+                <div className={`absolute left-[-14px] top-0 w-7 h-7 border flex items-center justify-center ${
                   i === 0 ? "bg-crimson border-crimson" : "bg-obsidian border-white/10"
                 }`}>
-                  {i === 0 && <div className="w-2 h-2 rounded-full bg-white" />}
+                  <Icon name={item.icon} size="15px" className={i === 0 ? "text-white" : "text-crimson"} />
                 </div>
-                {/* Step num */}
-                <div className="flex items-baseline gap-4 mb-2">
-                  <span className="font-label-sm text-[10px] text-crimson tracking-widest">{String(i + 1).padStart(2, "0")}</span>
-                  <h4 className="font-sub-hero text-lg font-bold text-white">{step.title}</h4>
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <h4 className="font-sub-hero text-lg font-bold text-white">{item.title}</h4>
+                  {item.year && <span className="font-label-sm text-[10px] text-crimson tracking-widest shrink-0">{item.year}</span>}
                 </div>
-                <p className="font-body-md text-white/35 text-sm leading-relaxed">{step.desc}</p>
+                <p className="font-body-md text-white/55 text-sm leading-relaxed">{item.detail}</p>
               </div>
             ))}
-          </div>
-
-          {/* Quote */}
-          <div className="mt-8 pl-10 border-l-2 border-crimson/50">
-            <p className="font-sub-hero text-xl text-white/70 italic leading-relaxed">
-              "Una buena solución no solo debe verse bien, también debe{" "}
-              <span className="text-crimson not-italic font-bold">funcionar bien.</span>"
-            </p>
           </div>
         </div>
       </div>
@@ -621,6 +570,7 @@ function Skills() {
 
 // ─── Contact ──────────────────────────────────────────────────────────────────
 function Contact() {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -650,13 +600,13 @@ function Contact() {
         body: new FormData(e.currentTarget),
       });
 
-      if (!response.ok) throw new Error("No se pudo enviar el mensaje");
+      if (!response.ok) throw new Error(t.contact.sendError);
 
       setSent(true);
       setForm({ name: "", email: "", message: "" });
       setTimeout(() => setSent(false), 3500);
     } catch {
-      setError("No se pudo enviar el mensaje. Intentá nuevamente en unos segundos.");
+      setError(t.contact.error);
     } finally {
       setSending(false);
     }
@@ -666,18 +616,17 @@ function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+      className="w-full max-w-container-max mx-auto py-stack-lg px-margin-mobile md:px-margin-desktop"
     >
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-16 lg:gap-20 items-start">
         {/* Left */}
         <div>
-          <p className="contact-reveal font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">Hablemos</p>
-          <h2 className="contact-reveal min-w-0 w-full overflow-visible font-sub-hero text-3xl md:text-5xl lg:text-6xl font-bold text-white uppercase leading-[0.95] mb-8 break-words">
-            Construyamos<br />algo<br /><span className="text-crimson">juntos</span>
+          <p className="contact-reveal font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.contact.eyebrow}</p>
+          <h2 className="contact-reveal min-w-0 w-full overflow-visible text-left font-sub-hero text-4xl sm:text-5xl font-bold tracking-[0] text-white uppercase leading-[1.12] mb-8">
+            {t.contact.heading[0]}<br />{t.contact.heading[1]}<br /><span className="text-crimson">{t.contact.heading[2]}</span>
           </h2>
-          <p className="contact-reveal font-body-md text-white/40 mb-12 max-w-sm text-base leading-relaxed">
-            Estoy disponible para proyectos freelance y oportunidades laborales en equipos de desarrollo.
-            Conversemos sobre cómo puedo aportar a tu próximo proyecto.
+          <p className="contact-reveal font-body-md text-white/60 mb-12 max-w-sm text-base leading-relaxed">
+            {t.contact.description}
           </p>
 
           {/* Availability badge */}
@@ -687,47 +636,44 @@ function Contact() {
               <div className="w-3 h-3 rounded-full bg-crimson/50 absolute inset-0 animate-ping" />
             </div>
             <div>
-              <span className="font-label-sm text-[10px] text-white/30 block uppercase tracking-widest">Estado</span>
-              <span className="font-sub-hero text-sm font-bold text-white">Disponible</span>
+              <span className="font-label-sm text-[10px] text-white/50 block uppercase tracking-widest">{t.contact.statusLabel}</span>
+              <span className="font-sub-hero text-sm font-bold text-white">{t.contact.status}</span>
             </div>
           </div>
 
-          <div className="contact-reveal space-y-5">
+          <div className="contact-reveal flex items-center gap-4">
             <a
               href="https://wa.me/543515290303"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-4 group hover-target w-fit"
+              aria-label="WhatsApp"
+              title="WhatsApp"
+              className="flex items-center group hover-target w-fit"
             >
               <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
                 <Icon name="phone" size="16px" />
               </span>
-              <span className="font-body-md text-white/50 group-hover:text-white transition-colors text-sm">
-                WhatsApp · +54 351 529-0303
-              </span>
             </a>
             <a
               href="mailto:neiraeliana2406@gmail.com"
-              className="flex items-center gap-4 group hover-target w-fit"
+              aria-label="Email"
+              title="Email"
+              className="flex items-center group hover-target w-fit"
             >
               <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
                 <Icon name="mail" size="16px" />
-              </span>
-              <span className="font-body-md text-white/50 group-hover:text-white transition-colors text-sm">
-                neiraeliana2406@gmail.com
               </span>
             </a>
             <a
               href="https://www.linkedin.com/in/eliana-neira-898099240/"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-4 group hover-target w-fit"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+              className="flex items-center group hover-target w-fit"
             >
               <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
                 <Icon name="link" size="16px" />
-              </span>
-              <span className="font-body-md text-white/50 group-hover:text-white transition-colors text-sm">
-                linkedin.com/in/eliana-neira-898099240
               </span>
             </a>
           </div>
@@ -742,22 +688,22 @@ function Contact() {
           {sent ? (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <Icon name="check_circle" fill={1} size="48px" className="text-crimson" />
-              <p className="font-sub-hero text-xl font-bold text-white">¡Mensaje enviado!</p>
-              <p className="font-body-md text-white/40 text-sm text-center">
-                Me pondré en contacto contigo pronto.
+              <p className="font-sub-hero text-xl font-bold text-white">{t.contact.success}</p>
+              <p className="font-body-md text-white/60 text-sm text-center">
+                {t.contact.successDetail}
               </p>
             </div>
           ) : (
             <form id="contactForm" onSubmit={submit} className="space-y-8">
-              <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portfolio" />
+              <input type="hidden" name="_subject" value={t.contact.subject} />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_captcha" value="false" />
               {[
-                { id: "name", label: "Tu nombre", type: "text", placeholder: "María González" },
-                { id: "email", label: "Correo electrónico", type: "email", placeholder: "maria@ejemplo.com" },
+                { id: "name", label: t.contact.name, type: "text", placeholder: t.contact.namePlaceholder },
+                { id: "email", label: t.contact.email, type: "email", placeholder: t.contact.emailPlaceholder },
               ].map(({ id, label, type, placeholder }) => (
                 <div key={id} className="flex flex-col">
-                  <label className="font-label-sm text-white/30 uppercase tracking-[0.2em] mb-3 text-[10px]">{label}</label>
+                  <label className="font-label-sm text-white/50 uppercase tracking-[0.2em] mb-3 text-[10px]">{label}</label>
                   <input
                     className="input-underline"
                     type={type}
@@ -770,11 +716,11 @@ function Contact() {
                 </div>
               ))}
               <div className="flex flex-col">
-                <label className="font-label-sm text-white/30 uppercase tracking-[0.2em] mb-3 text-[10px]">Cuéntame tu proyecto</label>
+                <label className="font-label-sm text-white/50 uppercase tracking-[0.2em] mb-3 text-[10px]">{t.contact.message}</label>
                 <textarea
                   className="input-underline resize-none"
                   name="message"
-                  placeholder="¿Qué tienes en mente?"
+                  placeholder={t.contact.messagePlaceholder}
                   rows={4}
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -786,7 +732,7 @@ function Contact() {
                 disabled={sending}
                 className="w-full bg-crimson text-white font-sub-hero font-bold py-5 px-8 hover:bg-white hover:text-obsidian transition-all duration-300 uppercase tracking-widest hover-target glow-hover flex items-center justify-center gap-3 mt-2"
               >
-                {sending ? "Enviando..." : "Enviar mensaje"}
+                {sending ? t.contact.sending : t.contact.submit}
                 <Icon name={sending ? "hourglass_empty" : "send"} size="16px" />
               </button>
               {error && <p className="font-body-md text-sm text-error text-center" role="alert">{error}</p>}
@@ -800,15 +746,16 @@ function Contact() {
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="w-full py-12 bg-obsidian border-t border-white/5">
-      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="font-hero text-2xl text-crimson tracking-widest">ELIANA</div>
-        <p className="font-label-sm text-[10px] text-white/20 uppercase tracking-widest order-3 md:order-none">
-          © 2026 · Hecho con código · C# + .NET + JavaScript
+        <p className="font-label-sm text-[10px] text-white/40 uppercase tracking-widest order-3 md:order-none">
+          {t.footer.copyright}
         </p>
-        <nav className="flex gap-8">
-          { ["GitHub", "LinkedIn", "Correo"].map((l) => (
+        <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
+          { ["GitHub", "LinkedIn", t.footer.email].map((l) => (
             <a
               key={l}
               href={
@@ -818,9 +765,9 @@ function Footer() {
                     ? "https://www.linkedin.com/in/eliana-neira-898099240/"
                     : "mailto:neiraeliana2406@gmail.com"
               }
-              target={l === "Correo" ? undefined : "_blank"}
-              rel={l === "Correo" ? undefined : "noreferrer"}
-              className="font-label-sm text-[10px] text-white/20 hover:text-crimson transition-colors uppercase tracking-widest hover-target"
+              target={l === t.footer.email ? undefined : "_blank"}
+              rel={l === t.footer.email ? undefined : "noreferrer"}
+              className="font-label-sm text-[10px] text-white/40 hover:text-crimson transition-colors uppercase tracking-widest hover-target"
             >
               {l}
             </a>
@@ -846,17 +793,19 @@ export default function App() {
   useHeroEntrance();
 
   return (
-    <div className="bg-obsidian text-on-surface min-h-full">
-      <WebGLBackground />
-      <Cursor />
-      <Nav />
-      <main>
-        <Hero />
-        <Projects />
-        <Skills />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="bg-obsidian text-on-surface min-h-full">
+        <WebGLBackground />
+        <Cursor />
+        <Nav />
+        <main>
+          <Hero />
+          <Projects />
+          <Skills />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }
