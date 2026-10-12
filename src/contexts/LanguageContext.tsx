@@ -29,6 +29,8 @@ const translations = {
         "02": { title: "TIENDA DE ROPA", category: "E-commerce web", tags: ["HTML", "CSS", "JavaScript"] },
         "03": { title: "MUNDO RUTA", category: "Proyecto grupal en C#", tags: ["C#", ".NET", "Trabajo grupal"] },
         "04": { title: "AN INSTALACIONES", category: "Proyecto personal en C#", tags: ["C#", ".NET", "Aplicación web"] },
+        "05": { title: "DELICIAS LOLI", category: "Landing page para boutique dulce", tags: ["HTML", "CSS", "JavaScript"] },
+        "06": { title: "LOPEZ DOJO", category: "Landing page para gimnasio", tags: ["HTML", "CSS", "JavaScript"] },
       },
     },
     skills: {
@@ -99,6 +101,8 @@ const translations = {
         "02": { title: "CLOTHING STORE", category: "E-commerce website", tags: ["HTML", "CSS", "JavaScript"] },
         "03": { title: "MUNDO RUTA", category: "Group project in C#", tags: ["C#", ".NET", "Group work"] },
         "04": { title: "AN INSTALACIONES", category: "Personal project in C#", tags: ["C#", ".NET", "Web application"] },
+        "05": { title: "DELICIAS LOLI", category: "Sweet shop landing page", tags: ["HTML", "CSS", "JavaScript"] },
+        "06": { title: "LOPEZ DOJO", category: "Gym landing page", tags: ["HTML", "CSS", "JavaScript"] },
       },
     },
     skills: {

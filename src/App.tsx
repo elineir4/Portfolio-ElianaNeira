@@ -277,37 +277,53 @@ function Hero() {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 const PROJECTS = [
   {
-    id: "01", span: "lg:col-span-8",
+    id: "01", span: "lg:col-span-6",
     img: "/images/Screenshot 2026-09-02 111111.png",
     github: "https://github.com/elineir4/Rotiseria-Don-Spiedo",
-    heroH: "h-64 md:h-[420px]",
+    heroH: "h-64 md:h-80",
   },
   {
-    id: "02", span: "lg:col-span-4",
+    id: "02", span: "lg:col-span-6",
     img: "/images/Screenshot 2026-09-02 111016.png",
     github: "https://github.com/elineir4/Scotch-Road",
-    heroH: "h-64 md:h-[420px]",
+    heroH: "h-64 md:h-80",
   },
   {
-    id: "03", span: "lg:col-span-5",
-    img: "/images/108c984febcd771d13f4774865e8940a.jpg",
+    id: "03", span: "lg:col-span-6",
+    img: "/images/mundo-ruta.png",
     github: "https://github.com/juampimedina06/mundo-ruta",
     heroH: "h-64 md:h-80",
   },
   {
-    id: "04", span: "lg:col-span-7",
+    id: "04", span: "lg:col-span-6",
     img: "/images/WhatsApp Image 2026-08-31 at 22.24.03.jpeg",
     github: "https://github.com/elineir4/AN-Instalaciones",
+    heroH: "h-64 md:h-80",
+  },
+  {
+    id: "05", span: "lg:col-span-6",
+    img: "/images/delicias-loli.png",
+    heroH: "h-64 md:h-80",
+  },
+  {
+    id: "06", span: "lg:col-span-6",
+    img: "/images/lopez-dojo.png",
     heroH: "h-64 md:h-80",
   },
 ];
 
 function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
   const { t } = useLanguage();
-  const project = t.projects.items[p.id as keyof typeof t.projects.items];
-  const cardRef = useRef<HTMLAnchorElement>(null);
+  const project =
+    t.projects.items[p.id as keyof typeof t.projects.items] ?? {
+      title: "Proyecto",
+      category: "Sin categoría",
+      tags: [],
+    };
+  const tags = project.tags ?? [];
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current!.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
@@ -324,33 +340,46 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
   };
 
   return (
-    <a
+    <div
       ref={cardRef}
-      href={p.github}
-      target="_blank"
-      rel="noreferrer"
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`project-card ${p.span} group hover-target relative overflow-hidden glass-panel cursor-none`}
+      className={`project-card ${p.span} group hover-target relative overflow-hidden glass-panel${p.github ? " cursor-none" : ""}`}
       style={{ willChange: "transform" }}
     >
       {/* Image */}
       <div className={`${p.heroH} w-full relative overflow-hidden bg-surface-container`}>
-        <div
-          className="absolute inset-0 bg-cover bg-center w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.04]"
-          style={{ backgroundImage: `url('${p.img}')` }}
-        />
+        {p.img ? (
+          <div
+            className="absolute inset-0 bg-cover bg-center w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.04]"
+            style={{ backgroundImage: `url('${p.img}')` }}
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/40">
+            <Icon name="add_photo_alternate" size="36px" />
+            <span className="font-label-sm text-[10px] uppercase tracking-[0.2em]">{t.projects.imagePlaceholder}</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
         {/* Neon border glow on hover */}
         <div className="absolute inset-0 border border-transparent group-hover:border-crimson/50 transition-colors duration-500" />
       </div>
+      {p.github && (
+        <a
+          href={p.github}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${project.title} — GitHub`}
+          className="absolute inset-0 z-10 cursor-none"
+        />
+      )}
 
       {/* Info */}
-      <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
+      <div className="pointer-events-none absolute bottom-0 left-0 z-20 w-full p-6 md:p-8">
         <div className="flex justify-between items-end">
           <div>
             <div className="flex gap-2 mb-3 flex-wrap">
-              {project.tags.map((tag) => (
+              {tags.map((tag) => (
                 <span key={tag} className="font-label-sm text-[10px] text-crimson/70 border border-crimson/20 px-2 py-0.5 uppercase tracking-widest">
                   {tag}
                 </span>
@@ -370,10 +399,12 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
       </div>
 
       {/* Arrow reveal */}
-      <div className="absolute top-6 right-6 w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
-        <Icon name="arrow_outward" size="16px" className="text-crimson" />
-      </div>
-    </a>
+      {p.github && (
+        <div className="pointer-events-none absolute top-6 right-6 z-20 w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+          <Icon name="arrow_outward" size="16px" className="text-crimson" />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -431,6 +462,9 @@ const SKILLS = [
   { label: "HTML", group: "code" },
   { label: "CSS", group: "code" },
   { label: "JavaScript", group: "code" },
+  { label: "React", group: "code" },
+  { label: "Vite", group: "code" },
+  { label: "Bootstrap", group: "code" },
   { label: "C#", group: "code" },
   { label: ".NET", group: "code" },
   { label: "ASP.NET", group: "code" },
