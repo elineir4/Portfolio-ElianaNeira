@@ -278,14 +278,14 @@ function Hero() {
 const PROJECTS = [
   {
     id: "01", span: "lg:col-span-6",
-    img: "/images/Screenshot 2026-09-02 111111.png",
+    img: "/images/proyecto-2.png",
     github: "https://github.com/elineir4/Rotiseria-Don-Spiedo",
     website: "https://rotiseria-don-spiedo.vercel.app/",
     heroH: "h-64 md:h-80",
   },
   {
     id: "02", span: "lg:col-span-6",
-    img: "/images/Screenshot 2026-09-02 111016.png",
+    img: "/images/proyecto-1.png",
     github: "https://github.com/elineir4/Scotch-Road",
     website: "https://scotchroad.vercel.app/",
     heroH: "h-64 md:h-80",
@@ -299,7 +299,7 @@ const PROJECTS = [
   },
   {
     id: "04", span: "lg:col-span-6",
-    img: "/images/WhatsApp Image 2026-08-31 at 22.24.03.jpeg",
+    img: "/images/whatsapp.jpeg",
     github: "https://github.com/elineir4/AN-Instalaciones",
     website: undefined,
     heroH: "h-64 md:h-80",
