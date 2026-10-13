@@ -257,3 +257,49 @@ body {
 .animate-ping {
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+@keyframes project-menu-appear {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes project-action-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-actions-menu {
+  animation: project-menu-appear 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: bottom center;
+}
+
+.project-action-link {
+  animation: project-action-appear 240ms ease-out both;
+}
+
+.project-action-link--code {
+  animation-delay: 70ms;
+}
+
+.project-action-link--page {
+  animation-delay: 130ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-actions-menu,
+  .project-action-link {
+    animation: none;
+  }
+}

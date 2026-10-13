@@ -280,39 +280,55 @@ const PROJECTS = [
     id: "01", span: "lg:col-span-6",
     img: "/images/Screenshot 2026-09-02 111111.png",
     github: "https://github.com/elineir4/Rotiseria-Don-Spiedo",
+    website: "https://rotiseria-don-spiedo.vercel.app/",
     heroH: "h-64 md:h-80",
   },
   {
     id: "02", span: "lg:col-span-6",
     img: "/images/Screenshot 2026-09-02 111016.png",
     github: "https://github.com/elineir4/Scotch-Road",
+    website: "https://scotchroad.vercel.app/",
     heroH: "h-64 md:h-80",
   },
   {
     id: "03", span: "lg:col-span-6",
     img: "/images/mundo-ruta.png",
     github: "https://github.com/juampimedina06/mundo-ruta",
+    website: undefined,
     heroH: "h-64 md:h-80",
   },
   {
     id: "04", span: "lg:col-span-6",
     img: "/images/WhatsApp Image 2026-08-31 at 22.24.03.jpeg",
     github: "https://github.com/elineir4/AN-Instalaciones",
+    website: undefined,
     heroH: "h-64 md:h-80",
   },
   {
     id: "05", span: "lg:col-span-6",
     img: "/images/delicias-loli.png",
+    github: "https://github.com/elineir4/deliciasLoli",
+    website: "https://delicias-loli.vercel.app/",
     heroH: "h-64 md:h-80",
   },
   {
     id: "06", span: "lg:col-span-6",
     img: "/images/lopez-dojo.png",
+    github: "https://github.com/elineir4/lopez-dojo",
+    website: "https://lopez-dojo.vercel.app/",
     heroH: "h-64 md:h-80",
   },
 ];
 
-function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
+function ProjectCard({
+  p,
+  openProject,
+  isSelected,
+}: {
+  p: (typeof PROJECTS)[0];
+  openProject: (id: string) => void;
+  isSelected: boolean;
+}) {
   const { t } = useLanguage();
   const project =
     t.projects.items[p.id as keyof typeof t.projects.items] ?? {
@@ -338,16 +354,28 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
   const onLeave = () => {
     gsap.to(cardRef.current, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.6)" });
   };
+  const onActivate = () => {
+    gsap.fromTo(cardRef.current, { scale: 0.97 }, { scale: 1, duration: 0.35, ease: "back.out(2)" });
+    openProject(p.id);
+  };
 
   return (
     <div
       ref={cardRef}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`project-card ${p.span} group hover-target relative overflow-hidden glass-panel${p.github ? " cursor-none" : ""}`}
+      className={`project-card ${p.span} group hover-target relative overflow-hidden glass-panel cursor-pointer`}
       style={{ willChange: "transform" }}
+      onClick={onActivate}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onActivate();
+        }
+      }}
     >
-      {/* Image */}
       <div className={`${p.heroH} w-full relative overflow-hidden bg-surface-container`}>
         {p.img ? (
           <div
@@ -361,20 +389,9 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
-        {/* Neon border glow on hover */}
         <div className="absolute inset-0 border border-transparent group-hover:border-crimson/50 transition-colors duration-500" />
       </div>
-      {p.github && (
-        <a
-          href={p.github}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`${project.title} — GitHub`}
-          className="absolute inset-0 z-10 cursor-none"
-        />
-      )}
 
-      {/* Info */}
       <div className="pointer-events-none absolute bottom-0 left-0 z-20 w-full p-6 md:p-8">
         <div className="flex justify-between items-end">
           <div>
@@ -398,10 +415,43 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
         </div>
       </div>
 
-      {/* Arrow reveal */}
-      {p.github && (
-        <div className="pointer-events-none absolute top-6 right-6 z-20 w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
-          <Icon name="arrow_outward" size="16px" className="text-crimson" />
+      {isSelected && (
+        <div className="project-actions-menu absolute inset-x-4 bottom-4 z-30 rounded-xl border border-crimson/40 bg-obsidian/90 p-3 shadow-2xl backdrop-blur-sm pointer-events-auto">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="font-label-sm text-[10px] uppercase tracking-[0.2em] text-white/60">{project.title}</span>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                openProject("");
+              }}
+              className="font-label-sm text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-crimson transition-colors"
+            >
+              {t.projects.actions.close}
+            </button>
+          </div>
+          <div className={`grid ${p.website ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
+            <a
+              href={p.github}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(event) => event.stopPropagation()}
+              className="project-action-link project-action-link--code flex items-center justify-center rounded-md border border-crimson/40 bg-crimson/10 px-3 py-2 text-center font-label-sm text-[10px] uppercase tracking-[0.2em] text-crimson transition hover:bg-crimson hover:text-white"
+            >
+              {t.projects.actions.code}
+            </a>
+            {p.website && (
+              <a
+                href={p.website}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className="project-action-link project-action-link--page flex items-center justify-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center font-label-sm text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-crimson hover:text-crimson"
+              >
+                {t.projects.actions.page}
+              </a>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -411,6 +461,7 @@ function ProjectCard({ p, i }: { p: (typeof PROJECTS)[0]; i: number }) {
 function Projects() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
   useEffect(() => {
     const cards = sectionRef.current?.querySelectorAll(".project-card");
@@ -450,7 +501,12 @@ function Projects() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter">
         {PROJECTS.map((p, i) => (
-          <ProjectCard key={p.id} p={p} i={i} />
+          <ProjectCard
+            key={p.id}
+            p={p}
+            openProject={(id) => setSelectedProject((current) => (current === id || id === "" ? null : id))}
+            isSelected={selectedProject === p.id}
+          />
         ))}
       </div>
     </section>
