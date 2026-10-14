@@ -223,7 +223,7 @@ function Hero() {
             <SplitText
               text="ELIANA"
               as="h3"
-              className="font-hero text-4xl sm:text-5xl lg:text-7xl xl:text-8xl leading-[0.8] font-bold text-white tracking-tight block text-center lg:text-left whitespace-nowrap"
+              className="font-hero text-4xl sm:text-5xl lg:text-7xl xl:text-8xl leading-[0.8] font-bold text-white/85 tracking-tight block text-center lg:text-left whitespace-nowrap"
               delay={0.5}
               stagger={0.015}
             />
@@ -232,7 +232,7 @@ function Hero() {
             <SplitText
               text={t.hero.role}
               as="h3"
-              className="font-hero text-2xl sm:text-3xl lg:text-5xl xl:text-6xl leading-[0.9] font-bold text-white tracking-tight block text-center lg:text-left whitespace-normal"
+              className="font-hero text-2xl sm:text-3xl lg:text-5xl xl:text-6xl leading-[0.9] font-bold text-white/80 tracking-tight block text-center lg:text-left whitespace-normal"
               delay={0.5}
               stagger={0.015}
             />
@@ -684,7 +684,7 @@ function Contact() {
     setError("");
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/neiraeliana2406@gmail.com", {
+      const response = await fetch("https://formsubmit.co/ajax/codebyelianaproy@gmail.com", {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(e.currentTarget),
@@ -745,7 +745,7 @@ function Contact() {
               </span>
             </a>
             <a
-              href="mailto:neiraeliana2406@gmail.com"
+              href="mailto:codebyelianaproy@gmail.com"
               aria-label="Email"
               title="Email"
               className="flex items-center group hover-target w-fit"
@@ -853,7 +853,7 @@ function Footer() {
                   ? "https://github.com/elineir4"
                   : l === "LinkedIn"
                     ? "https://www.linkedin.com/in/eliana-neira-898099240/"
-                    : "mailto:neiraeliana2406@gmail.com"
+                    : "mailto:codebyelianaproy@gmail.com"
               }
               target={l === t.footer.email ? undefined : "_blank"}
               rel={l === t.footer.email ? undefined : "noreferrer"}
