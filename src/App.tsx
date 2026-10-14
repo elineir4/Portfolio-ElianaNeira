@@ -506,10 +506,6 @@ function Tools() {
 // ─── Contact ──────────────────────────────────────────────────────────────────
 function Contact() {
   const { t } = useLanguage();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -522,30 +518,6 @@ function Contact() {
       }
     );
   }, []);
-
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSending(true);
-    setError("");
-
-    try {
-      const response = await fetch("https://formsubmit.co/ajax/14b6052248858ad54d361a0b9c45d406", {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(e.currentTarget),
-      });
-
-      if (!response.ok) throw new Error(t.contact.sendError);
-
-      setSent(true);
-      setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setSent(false), 3500);
-    } catch {
-      setError(t.contact.error);
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
     <section
@@ -612,16 +584,12 @@ function Contact() {
 
         <div className="contact-reveal relative overflow-hidden border border-white/10 bg-[#101010] p-5 sm:p-7 md:p-9">
           <div className="absolute right-0 top-0 h-20 w-20 border-r border-t border-crimson/40" />
-          {sent ? (
-            <div className="flex min-h-80 flex-col items-center justify-center gap-4">
-              <Icon name="check_circle" fill={1} size="48px" className="text-crimson" />
-              <p className="font-sub-hero text-xl font-bold text-white">{t.contact.success}</p>
-              <p className="font-body-md text-white/60 text-sm text-center">
-                {t.contact.successDetail}
-              </p>
-            </div>
-          ) : (
-            <form id="contactForm" onSubmit={submit} className="relative space-y-6">
+            <form
+              id="contactForm"
+              action="https://formsubmit.co/codebyelianaproy@gmail.com"
+              method="POST"
+              className="relative space-y-6"
+            >
               <div className="mb-2">
                 <span className="mb-2 block font-label-sm text-[9px] uppercase tracking-[0.22em] text-crimson">{t.contact.eyebrow}</span>
                 <p className="font-sub-hero text-lg font-semibold text-white">{t.contact.formHeading}</p>
@@ -639,8 +607,6 @@ function Contact() {
                     name="name"
                     autoComplete="name"
                     placeholder={t.contact.namePlaceholder}
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                   />
                 </div>
@@ -653,8 +619,6 @@ function Contact() {
                     name="email"
                     autoComplete="email"
                     placeholder={t.contact.emailPlaceholder}
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
                     required
                   />
                 </div>
@@ -667,22 +631,17 @@ function Contact() {
                   name="message"
                   placeholder={t.contact.messagePlaceholder}
                   rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
                   required
                 />
               </div>
               <button
                 type="submit"
-                disabled={sending}
-                className="glow-hover hover-target mt-1 flex w-full items-center justify-center gap-3 bg-crimson px-6 py-4 font-sub-hero font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-white hover:text-obsidian disabled:cursor-wait disabled:opacity-60"
+                className="glow-hover hover-target mt-1 flex w-full items-center justify-center gap-3 bg-crimson px-6 py-4 font-sub-hero font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-white hover:text-obsidian"
               >
-                {sending ? t.contact.sending : t.contact.submit}
-                <Icon name={sending ? "hourglass_empty" : "send"} size="16px" />
+                {t.contact.submit}
+                <Icon name="send" size="16px" />
               </button>
-              {error && <p className="font-body-md text-sm text-error text-center" role="alert">{error}</p>}
             </form>
-          )}
         </div>
       </div>
     </section>
