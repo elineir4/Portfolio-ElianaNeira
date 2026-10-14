@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WebGLBackground from "./components/WebGLBackground";
 import SplitText from "./components/SplitText";
+import ProjectCarousel from "./components/ProjectCarousel";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -185,10 +186,10 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative flex items-center justify-center overflow-x-clip pt-28 pb-16 px-5 md:px-12 lg:px-16"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-x-clip px-0 pb-16 pt-24"
     >
-      <div className="relative z-10 w-full max-w-container-max mx-auto min-h-[720px] lg:h-[580px] overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#151515] via-[#0e0e0e] to-[#080808] shadow-2xl flex flex-col items-center justify-center text-center lg:block">
-        <div className="absolute top-7 left-5 right-5 lg:top-8 lg:left-10 lg:right-10 flex flex-col items-center gap-3 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left font-label-sm text-[9px] tracking-[0.2em] text-white/80 uppercase">
+      <div className="relative z-10 flex min-h-[720px] w-full flex-col items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_center,_#151515_0%,_#0a0a0a_65%)] text-center lg:block lg:h-[calc(100svh-6rem)] lg:min-h-[640px]">
+        <div className="absolute top-7 left-5 right-5 lg:top-8 lg:left-20 lg:right-20 flex flex-col items-center gap-3 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left font-label-sm text-[9px] tracking-[0.2em] text-white/80 uppercase">
           <div className="flex flex-col items-center gap-1 text-center lg:items-start lg:text-left">
             <span>{t.hero.role}</span>
             <span className="text-white/60">{t.hero.digital}</span>
@@ -209,7 +210,7 @@ function Hero() {
 
         {/* Portrait */}
         {/* Text block */}
-        <div className="relative z-20 mt-24 px-5 sm:px-7 lg:absolute lg:left-10 lg:bottom-0 lg:-translate-y-3 lg:mt-0 lg:px-0 flex flex-col items-center lg:items-start gap-1 text-center lg:text-left w-full lg:w-[36%]">
+        <div className="relative z-20 mt-24 px-5 sm:px-7 lg:absolute lg:left-20 lg:bottom-0 lg:-translate-y-3 lg:mt-0 lg:px-0 flex flex-col items-center lg:items-start gap-1 text-center lg:text-left w-full lg:w-[36%]">
           <div className="w-full overflow-hidden">
             <SplitText
               text={t.hero.greeting}
@@ -244,7 +245,7 @@ function Hero() {
         </div>
 
         {/* Mobile portrait */}
-        <div className="hidden lg:block relative z-10 mt-7 h-56 w-44 lg:absolute lg:left-1/2 lg:bottom-0 lg:mt-0 lg:h-[560px] lg:w-[min(36vw,33rem)] lg:-translate-x-1/2">
+        <div className="hidden lg:block relative z-10 mt-7 h-56 w-44 lg:absolute lg:left-1/2 lg:bottom-0 lg:mt-0 lg:h-[min(78vh,42rem)] lg:w-[min(36vw,33rem)] lg:-translate-x-1/2">
           <img
             src="/images/eliana.png"
             alt="Retrato de Eliana"
@@ -253,7 +254,7 @@ function Hero() {
           />
         </div>
 
-        <aside className="relative z-20 mt-10 lg:absolute lg:right-10 lg:bottom-1 lg:mt-0 w-full lg:w-52 text-left px-7 lg:px-0">
+        <aside className="relative z-20 mt-10 lg:absolute lg:right-20 lg:bottom-1 lg:mt-0 w-full lg:w-52 text-left px-7 lg:px-0">
           <div className="space-y-4 border-l border-white/10 pl-5">
             {t.hero.features.map((feature) => (
               <div key={feature} className="flex items-start gap-3">
@@ -277,219 +278,52 @@ function Hero() {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 const PROJECTS = [
   {
-    id: "01", span: "lg:col-span-6",
+    id: "01",
     img: "/images/proyecto-2.png",
     github: "https://github.com/elineir4/Rotiseria-Don-Spiedo",
     website: "https://rotiseria-don-spiedo.vercel.app/",
-    heroH: "h-64 md:h-80",
   },
   {
-    id: "02", span: "lg:col-span-6",
+    id: "02",
     img: "/images/proyecto-1.png",
     github: "https://github.com/elineir4/Scotch-Road",
     website: "https://scotchroad.vercel.app/",
-    heroH: "h-64 md:h-80",
   },
   {
-    id: "03", span: "lg:col-span-6",
+    id: "03",
     img: "/images/mundo-ruta.png",
     github: "https://github.com/juampimedina06/mundo-ruta",
     website: undefined,
-    heroH: "h-64 md:h-80",
   },
   {
-    id: "04", span: "lg:col-span-6",
+    id: "04",
     img: "/images/whatsapp.jpeg",
     github: "https://github.com/elineir4/AN-Instalaciones",
     website: undefined,
-    heroH: "h-64 md:h-80",
   },
   {
-    id: "05", span: "lg:col-span-6",
+    id: "05",
     img: "/images/delicias-loli.png",
     github: "https://github.com/elineir4/deliciasLoli",
     website: "https://delicias-loli.vercel.app/",
-    heroH: "h-64 md:h-80",
   },
   {
-    id: "06", span: "lg:col-span-6",
+    id: "06",
     img: "/images/lopez-dojo.png",
     github: "https://github.com/elineir4/lopez-dojo",
     website: "https://lopez-dojo.vercel.app/",
-    heroH: "h-64 md:h-80",
   },
 ];
 
-function ProjectCard({
-  p,
-  openProject,
-  isSelected,
-}: {
-  p: (typeof PROJECTS)[0];
-  openProject: (id: string) => void;
-  isSelected: boolean;
-}) {
-  const { t } = useLanguage();
-  const project =
-    t.projects.items[p.id as keyof typeof t.projects.items] ?? {
-      title: "Proyecto",
-      category: "Sin categoría",
-      tags: [],
-    };
-  const tags = project.tags ?? [];
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current!.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-    gsap.to(cardRef.current, {
-      rotateY: x * 6,
-      rotateX: -y * 4,
-      duration: 0.4,
-      ease: "power2.out",
-      transformPerspective: 1000,
-    });
-  };
-  const onLeave = () => {
-    gsap.to(cardRef.current, { rotateY: 0, rotateX: 0, duration: 0.8, ease: "elastic.out(1, 0.6)" });
-  };
-  const onActivate = () => {
-    gsap.fromTo(cardRef.current, { scale: 0.97 }, { scale: 1, duration: 0.35, ease: "back.out(2)" });
-    openProject(p.id);
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={`project-card ${p.span} group hover-target relative overflow-hidden glass-panel cursor-pointer`}
-      style={{ willChange: "transform" }}
-      onClick={onActivate}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onActivate();
-        }
-      }}
-    >
-      <div className={`${p.heroH} w-full relative overflow-hidden bg-surface-container`}>
-        {p.img ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.04]"
-            style={{ backgroundImage: `url('${p.img}')` }}
-          />
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/40">
-            <Icon name="add_photo_alternate" size="36px" />
-            <span className="font-label-sm text-[10px] uppercase tracking-[0.2em]">{t.projects.imagePlaceholder}</span>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
-        <div className="absolute inset-0 border border-transparent group-hover:border-crimson/50 transition-colors duration-500" />
-      </div>
-
-      <div className="pointer-events-none absolute bottom-0 left-0 z-20 w-full p-6 md:p-8">
-        <div className="flex justify-between items-end">
-          <div>
-            <div className="flex gap-2 mb-3 flex-wrap">
-              {tags.map((tag) => (
-                <span key={tag} className="font-label-sm text-[10px] text-crimson/70 border border-crimson/20 px-2 py-0.5 uppercase tracking-widest">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <span className="font-label-sm text-white/60 uppercase tracking-widest block mb-1 text-[10px]">
-              {project.category}
-            </span>
-            <h3 className="font-sub-hero text-2xl md:text-4xl font-bold text-white group-hover:text-crimson transition-colors duration-300">
-              {project.title}
-            </h3>
-          </div>
-          <span className="font-hero text-5xl md:text-7xl text-white/[0.06] font-bold group-hover:text-crimson/20 transition-colors duration-300 leading-none">
-            {p.id}
-          </span>
-        </div>
-      </div>
-
-      {isSelected && (
-        <div className="project-actions-menu absolute inset-x-4 bottom-4 z-30 rounded-xl border border-crimson/40 bg-obsidian/90 p-3 shadow-2xl backdrop-blur-sm pointer-events-auto">
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <span className="font-label-sm text-[10px] uppercase tracking-[0.2em] text-white/60">{project.title}</span>
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                openProject("");
-              }}
-              className="font-label-sm text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-crimson transition-colors"
-            >
-              {t.projects.actions.close}
-            </button>
-          </div>
-          <div className={`grid ${p.website ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
-            <a
-              href={p.github}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(event) => event.stopPropagation()}
-              className="project-action-link project-action-link--code flex items-center justify-center rounded-md border border-crimson/40 bg-crimson/10 px-3 py-2 text-center font-label-sm text-[10px] uppercase tracking-[0.2em] text-crimson transition hover:bg-crimson hover:text-white"
-            >
-              {t.projects.actions.code}
-            </a>
-            {p.website && (
-              <a
-                href={p.website}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(event) => event.stopPropagation()}
-                className="project-action-link project-action-link--page flex items-center justify-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center font-label-sm text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-crimson hover:text-crimson"
-              >
-                {t.projects.actions.page}
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function Projects() {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
-
-  useEffect(() => {
-    const cards = sectionRef.current?.querySelectorAll(".project-card");
-    if (!cards) return;
-    gsap.fromTo(
-      cards,
-      { y: 140, opacity: 0, scale: 0.88, rotateX: 8 },
-      {
-        y: 0, opacity: 1, scale: 1, rotateX: 0,
-        duration: 1.2,
-        stagger: 0.22,
-        ease: "power4.out",
-        transformOrigin: "center bottom",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-      }
-    );
-  }, []);
 
   return (
     <section
       id="projects"
-      ref={sectionRef}
       className="w-full max-w-container-max mx-auto py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop"
     >
-      <div className="flex justify-between items-end mb-14 border-b border-white/5 pb-8 overflow-hidden">
+      <div className="mb-14 flex justify-center overflow-hidden border-b border-white/5 pb-8 text-center">
         <div>
           <p className="font-label-sm text-xs text-crimson tracking-[0.3em] uppercase mb-4">{t.projects.eyebrow}</p>
           <h2 className="font-sub-hero text-5xl md:text-7xl font-bold text-white uppercase leading-[0.9]">
@@ -499,16 +333,14 @@ function Projects() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter">
-        {PROJECTS.map((p, i) => (
-          <ProjectCard
-            key={p.id}
-            p={p}
-            openProject={(id) => setSelectedProject((current) => (current === id || id === "" ? null : id))}
-            isSelected={selectedProject === p.id}
-          />
-        ))}
-      </div>
+      <ProjectCarousel
+        projects={PROJECTS}
+        descriptions={t.projects.items}
+        actions={t.projects.actions}
+        controls={t.projects.carouselControls}
+        label={t.projects.carouselLabel}
+        imagePlaceholder={t.projects.imagePlaceholder}
+      />
     </section>
   );
 }
@@ -841,9 +673,6 @@ function Footer() {
     <footer className="w-full py-12 bg-obsidian border-t border-white/5">
       <div className="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="font-hero text-2xl text-crimson tracking-widest">ELIANA</div>
-        <p className="font-label-sm text-[10px] text-white/40 uppercase tracking-widest order-3 md:order-none">
-          {t.footer.copyright}
-        </p>
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
           { ["GitHub", "LinkedIn", t.footer.email].map((l) => (
             <a

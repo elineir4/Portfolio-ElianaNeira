@@ -1,0 +1,244 @@
+.project-carousel {
+  position: relative;
+  display: flex;
+  min-height: min(100svh, 900px);
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  overflow: visible;
+  padding: 3rem 0 5rem;
+  perspective: 1100px;
+}
+
+.project-carousel-stage {
+  position: relative;
+  display: grid;
+  min-height: clamp(340px, 55vh, 620px);
+  place-items: center;
+  overflow: hidden;
+  perspective: 1100px;
+  perspective-origin: 50% 45%;
+  user-select: none;
+}
+
+.music-project-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(68%, 620px);
+  aspect-ratio: 1.65;
+  overflow: hidden;
+  border: 1px solid rgba(165, 29, 63, 0.34);
+  background: #151515;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.music-project-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.music-project-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(10 10 10 / 4%) 25%, rgb(10 10 10 / 90%) 100%);
+  pointer-events: none;
+}
+
+.music-project-info {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  color: #fff;
+  pointer-events: none;
+}
+
+.music-project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+}
+
+.music-project-tags span {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid rgb(165 29 63 / 45%);
+  color: #e6bbc7;
+  font: 500 0.58rem/1.2 "JetBrains Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.music-project-category {
+  margin: 0 0 0.25rem;
+  color: rgb(255 255 255 / 66%);
+  font: 500 0.62rem/1.5 "JetBrains Mono", monospace;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.music-project-info h3 {
+  margin: 0;
+  color: #fff;
+  font: 700 clamp(1.45rem, 3.3vw, 2.7rem)/1.05 "Syne", sans-serif;
+  text-transform: uppercase;
+}
+
+.music-project-links {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+  pointer-events: auto;
+}
+
+.music-project-links a {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgb(165 29 63 / 72%);
+  background: rgb(10 10 10 / 78%);
+  color: #fff;
+  font: 500 0.58rem/1.3 "JetBrains Mono", monospace;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.music-project-links a:hover,
+.music-project-links a:focus-visible {
+  border-color: #a51d3f;
+  background: #a51d3f;
+}
+
+.music-project-links a:focus-visible {
+  outline: 2px solid #e6bbc7;
+  outline-offset: 4px;
+}
+
+.project-carousel-progress {
+  position: absolute;
+  right: 1rem;
+  bottom: 2rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.project-carousel-arrow {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 50%;
+  background: #121212;
+  color: #f5f5f5;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-carousel-arrow:active {
+  border-color: #a51d3f;
+  background: #1a1013;
+}
+
+.project-carousel-arrow svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.project-carousel-arrow:focus-visible {
+  outline: 2px solid #e6bbc7;
+  outline-offset: 3px;
+}
+
+.project-carousel-count {
+  min-width: 3rem;
+  color: rgb(255 255 255 / 70%);
+  font: 500 0.7rem/1 "JetBrains Mono", monospace;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.project-carousel-progress-track {
+  width: min(12rem, 35vw);
+  height: 1px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 16%);
+}
+
+.project-carousel-progress-track span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #a51d3f;
+  transform-origin: left center;
+}
+
+@media (max-width: 640px) {
+  .project-carousel {
+    min-height: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 3.25rem;
+  }
+
+  .project-carousel-stage {
+    min-height: clamp(280px, 38svh, 360px);
+  }
+
+  .project-carousel-progress {
+    position: static;
+    justify-content: space-between;
+    gap: 0.7rem;
+    margin: 0.75rem 0 0;
+    padding: 0 0.25rem;
+  }
+
+  .project-carousel-arrow {
+    display: grid;
+    flex: 0 0 auto;
+  }
+
+  .project-carousel-progress-track {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  .music-project-card {
+    width: min(76%, 400px);
+    aspect-ratio: 1.08;
+  }
+
+  .music-project-cover {
+    object-position: center;
+  }
+
+  .music-project-info {
+    right: 0.8rem;
+    bottom: 0.8rem;
+    left: 0.8rem;
+  }
+
+  .music-project-info h3 {
+    font-size: clamp(1.25rem, 7vw, 1.8rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-project-links a {
+    transition: none;
+  }
+}

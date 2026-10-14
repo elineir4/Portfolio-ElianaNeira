@@ -25,6 +25,11 @@ const translations = {
       headingFirst: "Mis",
       headingSecond: "proyectos",
       imagePlaceholder: "Imagen no disponible",
+      carouselControls: {
+        previous: "Proyecto anterior",
+        next: "Proyecto siguiente",
+      },
+      carouselLabel: "Proyectos del portfolio",
       actions: { code: "Ver código", page: "Ver página", close: "Cerrar" },
       items: {
         "01": { title: "DON SPIEDO", category: "Sitio web para rotisería", tags: ["HTML", "CSS", "JavaScript"] },
@@ -75,7 +80,7 @@ const translations = {
       subject: "Nuevo mensaje desde tu portfolio",
       sendError: "No se pudo enviar el mensaje",
     },
-    footer: { copyright: "© 2026 · Hecho con código · C# + .NET + JavaScript", email: "Correo" },
+    footer: { email: "Correo" },
   },
   en: {
     nav: { home: "Home", projects: "Projects", skills: "Technologies", contact: "Contact", talk: "Let's talk" },
@@ -99,6 +104,11 @@ const translations = {
       headingFirst: "My",
       headingSecond: "projects",
       imagePlaceholder: "Image unavailable",
+      carouselControls: {
+        previous: "Previous project",
+        next: "Next project",
+      },
+      carouselLabel: "Portfolio projects",
       actions: { code: "View code", page: "View page", close: "Close" },
       items: {
         "01": { title: "DON SPIEDO", category: "Rotisserie website", tags: ["HTML", "CSS", "JavaScript"] },
@@ -149,7 +159,7 @@ const translations = {
       subject: "New message from your portfolio",
       sendError: "The message could not be sent",
     },
-    footer: { copyright: "© 2026 · Built with code · C# + .NET + JavaScript", email: "Email" },
+    footer: { email: "Email" },
   },
 } as const;
 
