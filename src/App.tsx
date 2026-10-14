@@ -83,7 +83,8 @@ function Nav() {
   const links = [
     { id: "home", label: t.nav.home },
     { id: "projects", label: t.nav.projects },
-    { id: "skills", label: t.nav.skills },
+    { id: "education", label: t.nav.education },
+    { id: "tools", label: t.nav.tools },
     { id: "contact", label: t.nav.contact },
   ];
 
@@ -345,72 +346,15 @@ function Projects() {
   );
 }
 
-// ─── Skills & Education ──────────────────────────────────────────────────────
-const SKILLS = [
-  { label: "HTML", group: "code" },
-  { label: "CSS", group: "code" },
-  { label: "JavaScript", group: "code" },
-  { label: "React", group: "code" },
-  { label: "Vite", group: "code" },
-  { label: "Bootstrap", group: "code" },
-  { label: "C#", group: "code" },
-  { label: ".NET", group: "code" },
-  { label: "ASP.NET", group: "code" },
-  { label: "Entity Framework", group: "code" },
-  { label: "Blazor", group: "code" },
-];
-
-function SkillPill({ label, delay }: { label: string; delay: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-
-  const onMove = (e: React.MouseEvent<HTMLSpanElement>) => {
-    const rect = ref.current!.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(ref.current, { x: x * 0.25, y: y * 0.25, duration: 0.3, ease: "power2.out" });
-  };
-  const onLeave = () => {
-    gsap.to(ref.current, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
-  };
-
-  return (
-    <span
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="skill-pill inline-block px-4 py-2 border border-white/10 font-label-sm text-white/65 hover:border-crimson hover:text-white hover:bg-crimson/10 transition-colors duration-200 cursor-default text-[10px] uppercase tracking-widest opacity-0"
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {label}
-    </span>
-  );
-}
-
-function Skills() {
+// ─── Education ────────────────────────────────────────────────────────────────
+function EducationSection() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
+  const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-
-    gsap.fromTo(
-      el.querySelectorAll(".process-step"),
-      { x: -90, opacity: 0, rotateY: -8 },
-      {
-        x: 0, opacity: 1, rotateY: 0, duration: 0.95, stagger: 0.18, ease: "power4.out",
-        scrollTrigger: { trigger: el.querySelector(".process-timeline"), start: "top 80%" },
-      }
-    );
-
-    gsap.fromTo(
-      el.querySelectorAll(".skill-pill"),
-      { scale: 0.55, y: 24, opacity: 0 },
-      {
-        scale: 1, y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: "back.out(1.7)",
-        scrollTrigger: { trigger: el.querySelector(".skills-pills"), start: "top 80%" },
-      }
-    );
 
     gsap.fromTo(
       el.querySelectorAll(".section-title"),
@@ -424,64 +368,133 @@ function Skills() {
 
   return (
     <section
-      id="skills"
+      id="education"
       ref={sectionRef}
       className="w-full py-stack-md md:py-stack-lg px-margin-mobile md:px-margin-desktop bg-surface-container-lowest/70 border-y border-white/5 relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-crimson/4 rounded-full blur-3xl pointer-events-none translate-x-1/2 -translate-y-1/2" />
 
-      <div className="w-full max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-24 lg:gap-32 relative z-10">
-        {/* Left */}
-        <div>
-          <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.skills.eyebrow}</p>
-          <h2 className="section-title font-sub-hero text-4xl md:text-6xl font-bold text-white uppercase mb-12">
-            {t.skills.headingFirst}<br /><span className="text-white/35">{t.skills.headingSecond}</span>
-          </h2>
-
-          <div className="mb-10">
-            <h3 className="font-label-sm text-[10px] text-white/50 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">{t.skills.profile}</h3>
-            <div className="space-y-6">
-              {t.skills.profileItems.map(({ title, detail }, i) => (
-                <div key={title} className="flex justify-between items-start border-b border-white/5 pb-5">
-                  <div>
-                    <span className="font-body-md text-white font-medium block">{title}</span>
-                    <span className="font-label-sm text-white/50 text-[10px] mt-1 block">{detail}</span>
-                  </div>
-                  <span className="font-label-sm text-crimson text-[10px] shrink-0 ml-6">{String(i + 1).padStart(2, "0")}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-label-sm text-[10px] text-white/50 uppercase tracking-[0.3em] mb-6 border-b border-white/5 pb-4">{t.skills.tools}</h3>
-            <div className="skills-pills flex flex-wrap gap-3">
-              {SKILLS.map((s, i) => <SkillPill key={s.label} label={s.label} delay={i * 40} />)}
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Education */}
-        <div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl">
+        <div className="mb-12 text-center md:mb-16">
           <p className="section-title font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.education.eyebrow}</p>
           <h2 className="section-title font-sub-hero text-4xl md:text-6xl font-bold text-white uppercase mb-12">
             {t.education.headingFirst}<br /><span className="text-white/35">{t.education.headingSecond}</span>
           </h2>
+        </div>
 
-          <div className="process-timeline relative border-l border-white/5 ml-5 space-y-0">
-            {t.education.items.map((item, i) => (
-              <div key={item.title} className="process-step relative pl-10 pb-10">
-                <div className={`absolute left-[-14px] top-0 w-7 h-7 border flex items-center justify-center ${
-                  i === 0 ? "bg-crimson border-crimson" : "bg-obsidian border-white/10"
-                }`}>
-                  <Icon name={item.icon} size="15px" className={i === 0 ? "text-white" : "text-crimson"} />
-                </div>
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <h4 className="font-sub-hero text-lg font-bold text-white">{item.title}</h4>
-                  {item.year && <span className="font-label-sm text-[10px] text-crimson tracking-widest shrink-0">{item.year}</span>}
-                </div>
-                <p className="font-body-md text-white/55 text-sm leading-relaxed">{item.detail}</p>
-              </div>
+        <div className="grid gap-8 sm:grid-cols-2">
+          {t.education.items.map((item, i) => (
+            <button
+              key={item.title}
+              type="button"
+              aria-expanded={selectedStudy === i}
+              aria-controls="education-description"
+              onClick={() => setSelectedStudy(selectedStudy === i ? null : i)}
+              className={`group relative overflow-hidden border text-left transition duration-300 ${
+                selectedStudy === i ? "border-crimson" : "border-white/10 hover:border-crimson/60"
+              }`}
+            >
+              <img
+                src={item.image}
+                alt={item.imageAlt}
+                className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <span className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent" />
+              <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 sm:p-6">
+                <span>
+                  <span className="mb-2 block font-label-sm text-[10px] uppercase tracking-[0.25em] text-crimson">
+                    {item.year || t.education.inProgress}
+                  </span>
+                  <span className="block font-sub-hero text-xl font-bold text-white sm:text-2xl">{item.title}</span>
+                </span>
+                <Icon
+                  name={selectedStudy === i ? "close" : "add"}
+                  size="22px"
+                  className="mb-1 shrink-0 text-white transition-transform duration-300 group-hover:rotate-90"
+                />
+              </span>
+            </button>
+          ))}
+        </div>
+        {selectedStudy !== null && (
+          <div
+            id="education-description"
+            role="status"
+            className="mt-5 border border-white/10 bg-white/[0.02] p-5 sm:p-7"
+          >
+            <div className="mb-3 flex items-center gap-3">
+              <Icon name={t.education.items[selectedStudy].icon} size="20px" className="text-crimson" />
+              <h3 className="font-sub-hero text-lg font-bold text-white">
+                {t.education.items[selectedStudy].title}
+              </h3>
+            </div>
+            <p className="font-body-md text-sm leading-relaxed text-white/60">
+              {t.education.items[selectedStudy].detail}
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+const TOOLS = [
+  { label: "React", icon: "hub" },
+  { label: "C#", icon: "terminal" },
+  { label: ".NET", icon: "settings" },
+  { label: "Git", icon: "account_tree" },
+  { label: "GitHub", icon: "code" },
+  { label: "Jira", icon: "view_kanban" },
+  { label: "Trello", icon: "dashboard" },
+  { label: "HTML", icon: "code" },
+  { label: "CSS", icon: "palette" },
+  { label: "JavaScript", icon: "data_object" },
+  { label: "SQL Server", icon: "database" },
+];
+
+function Tools() {
+  const { t } = useLanguage();
+
+  return (
+    <section
+      id="tools"
+      className="tools-section relative w-full overflow-hidden border-y border-white/5 bg-surface-container-lowest/70 py-stack-md md:py-stack-lg"
+      aria-labelledby="tools-heading"
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-30 tools-grid-texture" />
+      <div className="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+        <div className="mb-10 flex items-end justify-between gap-6 border-b border-white/10 pb-6 md:mb-12">
+          <div>
+            <p className="mb-3 font-label-sm text-[10px] uppercase tracking-[0.3em] text-crimson">{t.skills.toolsEyebrow}</p>
+            <h2 id="tools-heading" className="font-hero text-5xl uppercase leading-none text-white sm:text-6xl md:text-7xl">
+              SKILLS
+            </h2>
+          </div>
+          <span className="hidden pb-1 font-label-sm text-[10px] uppercase tracking-[0.2em] text-white/35 sm:block">
+            {String(TOOLS.length).padStart(2, "0")} {t.skills.toolCountLabel}
+          </span>
+        </div>
+
+        <div className="skills-marquee" aria-label={t.skills.toolCountLabel}>
+          <div className="skills-marquee-track">
+            {[0, 1].map((copy) => (
+              <ul key={copy} className="skills-marquee-list" aria-hidden={copy === 1}>
+                {TOOLS.map(({ label, icon }) => (
+                  <li
+                    key={label}
+                    className="tool-card group relative z-0 flex flex-col items-center justify-center gap-3 border border-white/15 bg-white/[0.02] px-3 py-4 text-center transition duration-300 hover:z-10 hover:scale-110 hover:border-crimson/70 hover:bg-crimson/[0.06]"
+                  >
+                    <Icon
+                      name={icon}
+                      size="32px"
+                      className="text-white/75 transition-colors duration-300 group-hover:text-crimson"
+                    />
+                    <span className="font-label-sm text-[10px] uppercase tracking-[0.12em] text-white/70 transition-colors duration-300 group-hover:text-white">
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             ))}
           </div>
         </div>
@@ -516,7 +529,7 @@ function Contact() {
     setError("");
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/codebyelianaproy@gmail.com", {
+      const response = await fetch("https://formsubmit.co/ajax/14b6052248858ad54d361a0b9c45d406", {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(e.currentTarget),
@@ -540,75 +553,67 @@ function Contact() {
       ref={sectionRef}
       className="w-full max-w-container-max mx-auto py-stack-lg px-margin-mobile md:px-margin-desktop"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-16 lg:gap-20 items-start">
-        {/* Left */}
-        <div>
-          <p className="contact-reveal font-label-sm text-[10px] text-crimson tracking-[0.3em] uppercase mb-4">{t.contact.eyebrow}</p>
-          <h2 className="contact-reveal min-w-0 w-full overflow-visible text-left font-sub-hero text-4xl sm:text-5xl font-bold tracking-[0] text-white uppercase leading-[1.12] mb-8">
-            {t.contact.heading[0]}<br />{t.contact.heading[1]}<br /><span className="text-crimson">{t.contact.heading[2]}</span>
-          </h2>
-          <p className="contact-reveal font-body-md text-white/60 mb-12 max-w-sm text-base leading-relaxed">
+      <div className="mb-12 border-b border-white/10 pb-8">
+        <p className="contact-reveal mb-4 font-label-sm text-[10px] uppercase tracking-[0.3em] text-crimson">{t.contact.eyebrow}</p>
+        <h2 className="contact-reveal max-w-3xl font-sub-hero text-4xl font-bold uppercase leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl">
+          {t.contact.heading[0]} {t.contact.heading[1]}{" "}
+          <span className="text-crimson">{t.contact.heading[2]}</span>
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+        <div className="flex flex-col">
+          <p className="contact-reveal mb-8 max-w-lg font-body-md text-base leading-relaxed text-white/60 md:text-lg">
             {t.contact.description}
           </p>
 
-          {/* Availability badge */}
-          <div className="contact-reveal flex items-center gap-4 mb-12 p-5 border border-white/5 bg-surface-container/30 w-fit">
-            <div className="relative">
-              <div className="w-3 h-3 rounded-full bg-crimson" />
-              <div className="w-3 h-3 rounded-full bg-crimson/50 absolute inset-0 animate-ping" />
+          <div className="contact-reveal mb-8 flex w-fit items-center gap-4 border border-white/10 bg-white/[0.03] px-5 py-4">
+            <div className="relative h-3 w-3 shrink-0">
+              <div className="h-3 w-3 rounded-full bg-crimson" />
+              <div className="absolute inset-0 h-3 w-3 animate-ping rounded-full bg-crimson/50" />
             </div>
             <div>
-              <span className="font-label-sm text-[10px] text-white/50 block uppercase tracking-widest">{t.contact.statusLabel}</span>
+              <span className="block font-label-sm text-[10px] uppercase tracking-widest text-white/45">{t.contact.statusLabel}</span>
               <span className="font-sub-hero text-sm font-bold text-white">{t.contact.status}</span>
             </div>
           </div>
 
-          <div className="contact-reveal flex items-center gap-4">
+          <div className="contact-reveal divide-y divide-white/10 border-y border-white/10">
             <a
-              href="https://wa.me/543515290303"
+              href="https://github.com/elineir4"
               target="_blank"
               rel="noreferrer"
-              aria-label="WhatsApp"
-              title="WhatsApp"
-              className="flex items-center group hover-target w-fit"
+              className="group flex items-center gap-4 py-4 hover-target"
             >
-              <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
-                <Icon name="phone" size="16px" />
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 text-crimson transition-colors group-hover:border-crimson">
+                <Icon name="code" size="17px" />
               </span>
-            </a>
-            <a
-              href="mailto:codebyelianaproy@gmail.com"
-              aria-label="Email"
-              title="Email"
-              className="flex items-center group hover-target w-fit"
-            >
-              <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
-                <Icon name="mail" size="16px" />
+              <span className="min-w-0">
+                <span className="block font-label-sm text-[9px] uppercase tracking-[0.18em] text-white/40">GitHub</span>
+                <span className="font-body-md text-sm text-white/80 transition-colors group-hover:text-white">github.com/elineir4</span>
               </span>
             </a>
             <a
               href="https://www.linkedin.com/in/eliana-neira-898099240/"
               target="_blank"
               rel="noreferrer"
-              aria-label="LinkedIn"
-              title="LinkedIn"
-              className="flex items-center group hover-target w-fit"
+              className="group flex items-center gap-4 py-4 hover-target"
             >
-              <span className="w-10 h-10 border border-white/10 group-hover:border-crimson flex items-center justify-center text-white/40 group-hover:text-crimson transition-colors">
-                <Icon name="link" size="16px" />
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 text-crimson transition-colors group-hover:border-crimson">
+                <Icon name="link" size="17px" />
+              </span>
+              <span className="min-w-0">
+                <span className="block font-label-sm text-[9px] uppercase tracking-[0.18em] text-white/40">LinkedIn</span>
+                <span className="font-body-md text-sm text-white/80 transition-colors group-hover:text-white">Eliana Neira</span>
               </span>
             </a>
           </div>
         </div>
 
-        {/* Right: Form */}
-        <div className="contact-reveal glass-panel p-8 md:p-12 relative overflow-hidden">
-          {/* Decorative corner */}
-          <div className="absolute top-0 right-0 w-24 h-24 border-t border-r border-crimson/20 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 border-b border-l border-crimson/20 pointer-events-none" />
-
+        <div className="contact-reveal relative overflow-hidden border border-white/10 bg-[#101010] p-5 sm:p-7 md:p-9">
+          <div className="absolute right-0 top-0 h-20 w-20 border-r border-t border-crimson/40" />
           {sent ? (
-            <div className="flex flex-col items-center justify-center h-64 gap-4">
+            <div className="flex min-h-80 flex-col items-center justify-center gap-4">
               <Icon name="check_circle" fill={1} size="48px" className="text-crimson" />
               <p className="font-sub-hero text-xl font-bold text-white">{t.contact.success}</p>
               <p className="font-body-md text-white/60 text-sm text-center">
@@ -616,34 +621,52 @@ function Contact() {
               </p>
             </div>
           ) : (
-            <form id="contactForm" onSubmit={submit} className="space-y-8">
+            <form id="contactForm" onSubmit={submit} className="relative space-y-6">
+              <div className="mb-2">
+                <span className="mb-2 block font-label-sm text-[9px] uppercase tracking-[0.22em] text-crimson">{t.contact.eyebrow}</span>
+                <p className="font-sub-hero text-lg font-semibold text-white">{t.contact.formHeading}</p>
+              </div>
               <input type="hidden" name="_subject" value={t.contact.subject} />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_captcha" value="false" />
-              {[
-                { id: "name", label: t.contact.name, type: "text", placeholder: t.contact.namePlaceholder },
-                { id: "email", label: t.contact.email, type: "email", placeholder: t.contact.emailPlaceholder },
-              ].map(({ id, label, type, placeholder }) => (
-                <div key={id} className="flex flex-col">
-                  <label className="font-label-sm text-white/50 uppercase tracking-[0.2em] mb-3 text-[10px]">{label}</label>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="flex flex-col">
+                  <label htmlFor="contact-name" className="mb-2 font-label-sm text-[10px] uppercase tracking-[0.15em] text-white/55">{t.contact.name}</label>
                   <input
+                    id="contact-name"
                     className="input-underline"
-                    type={type}
-                    name={id}
-                    placeholder={placeholder}
-                    value={form[id as "name" | "email"]}
-                    onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                    type="text"
+                    name="name"
+                    autoComplete="name"
+                    placeholder={t.contact.namePlaceholder}
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                   />
                 </div>
-              ))}
+                <div className="flex flex-col">
+                  <label htmlFor="contact-email" className="mb-2 font-label-sm text-[10px] uppercase tracking-[0.15em] text-white/55">{t.contact.email}</label>
+                  <input
+                    id="contact-email"
+                    className="input-underline"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    placeholder={t.contact.emailPlaceholder}
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
               <div className="flex flex-col">
-                <label className="font-label-sm text-white/50 uppercase tracking-[0.2em] mb-3 text-[10px]">{t.contact.message}</label>
+                <label htmlFor="contact-message" className="mb-2 font-label-sm text-[10px] uppercase tracking-[0.15em] text-white/55">{t.contact.message}</label>
                 <textarea
+                  id="contact-message"
                   className="input-underline resize-none"
                   name="message"
                   placeholder={t.contact.messagePlaceholder}
-                  rows={4}
+                  rows={5}
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   required
@@ -652,7 +675,7 @@ function Contact() {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full bg-crimson text-white font-sub-hero font-bold py-5 px-8 hover:bg-white hover:text-obsidian transition-all duration-300 uppercase tracking-widest hover-target glow-hover flex items-center justify-center gap-3 mt-2"
+                className="glow-hover hover-target mt-1 flex w-full items-center justify-center gap-3 bg-crimson px-6 py-4 font-sub-hero font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-white hover:text-obsidian disabled:cursor-wait disabled:opacity-60"
               >
                 {sending ? t.contact.sending : t.contact.submit}
                 <Icon name={sending ? "hourglass_empty" : "send"} size="16px" />
@@ -668,30 +691,10 @@ function Contact() {
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
-  const { t } = useLanguage();
   return (
     <footer className="w-full py-12 bg-obsidian border-t border-white/5">
       <div className="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="font-hero text-2xl text-crimson tracking-widest">ELIANA</div>
-        <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
-          { ["GitHub", "LinkedIn", t.footer.email].map((l) => (
-            <a
-              key={l}
-              href={
-                l === "GitHub"
-                  ? "https://github.com/elineir4"
-                  : l === "LinkedIn"
-                    ? "https://www.linkedin.com/in/eliana-neira-898099240/"
-                    : "mailto:codebyelianaproy@gmail.com"
-              }
-              target={l === t.footer.email ? undefined : "_blank"}
-              rel={l === t.footer.email ? undefined : "noreferrer"}
-              className="font-label-sm text-[10px] text-white/40 hover:text-crimson transition-colors uppercase tracking-widest hover-target"
-            >
-              {l}
-            </a>
-          ))}
-        </nav>
       </div>
     </footer>
   );
@@ -720,7 +723,8 @@ export default function App() {
         <main>
           <Hero />
           <Projects />
-          <Skills />
+          <EducationSection />
+          <Tools />
           <Contact />
         </main>
         <Footer />

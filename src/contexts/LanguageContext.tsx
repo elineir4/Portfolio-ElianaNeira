@@ -4,7 +4,7 @@ export type Language = "es" | "en";
 
 const translations = {
   es: {
-    nav: { home: "Inicio", projects: "Proyectos", skills: "Tecnologías", contact: "Contacto", talk: "Hablemos" },
+    nav: { home: "Inicio", projects: "Proyectos", education: "Estudios", tools: "SKILLS", contact: "Contacto", talk: "Hablemos" },
     hero: {
       role: "DESARROLLADORA FULL STACK",
       digital: "DESARROLLADORA DIGITAL",
@@ -41,28 +41,23 @@ const translations = {
       },
     },
     skills: {
-      eyebrow: "Capacidades",
-      headingFirst: "Mis",
-      headingSecond: "tecnologías",
-      profile: "Perfil",
-      tools: "Herramientas",
-      profileItems: [
-        { title: "Desarrolladora Full Stack", detail: "Frontend, backend y bases de datos" },
-        { title: "Enfoque en soluciones .NET", detail: "C# · ASP.NET · Blazor · Entity Framework" },
-      ],
+      toolsEyebrow: "Mi stack de desarrollo",
+      toolCountLabel: "SKILLS",
     },
     education: {
       eyebrow: "Formación académica",
       headingFirst: "Mis",
       headingSecond: "estudios",
+      inProgress: "En curso",
       items: [
-        { title: "Secundario terminado", detail: "Ciencias Sociales y Humanidades", year: "2023", icon: "school" },
-        { title: "Tecnicatura en Desarrollo de Software", detail: "En curso", year: "", icon: "code" },
+        { title: "Secundario terminado", detail: "Formación secundaria con orientación en Ciencias Sociales y Humanidades, finalizada en 2023.", year: "2023", icon: "school", image: "/images/secu.jpg", imageAlt: "Aula de informática durante una clase" },
+        { title: "Tecnicatura en Desarrollo de Software", detail: "Actualmente me encuentro cursando la tecnicatura en Desarrollo de Software. Donde amplio mis conociemientos en progrmacion utilizando herramientas como C#, .NET, Entity Framework y Bootstrap. ", year: "", icon: "code", image: "/images/prog.jpg", imageAlt: "Graduados celebrando la finalización de sus estudios" },
       ],
     },
     contact: {
       eyebrow: "Hablemos",
       heading: ["Construyamos", "algo", "juntos"],
+      formHeading: "Envíame un mensaje",
       description: "Estoy disponible para proyectos freelance y oportunidades laborales en equipos de desarrollo. Conversemos sobre cómo puedo aportar a tu próximo proyecto.",
       statusLabel: "Estado",
       status: "Disponible",
@@ -83,7 +78,7 @@ const translations = {
     footer: { email: "Correo" },
   },
   en: {
-    nav: { home: "Home", projects: "Projects", skills: "Technologies", contact: "Contact", talk: "Let's talk" },
+    nav: { home: "Home", projects: "Projects", education: "Education", tools: "SKILLS", contact: "Contact", talk: "Let's talk" },
     hero: {
       role: "FULL STACK DEVELOPER",
       digital: "DIGITAL DEVELOPER",
@@ -120,28 +115,23 @@ const translations = {
       },
     },
     skills: {
-      eyebrow: "Capabilities",
-      headingFirst: "My",
-      headingSecond: "technologies",
-      profile: "Profile",
-      tools: "Tools",
-      profileItems: [
-        { title: "Full Stack Developer", detail: "Frontend, backend and databases" },
-        { title: "Focused on .NET solutions", detail: "C# · ASP.NET · Blazor · Entity Framework" },
-      ],
+      toolsEyebrow: "My development stack",
+      toolCountLabel: "SKILLS",
     },
     education: {
       eyebrow: "Academic background",
       headingFirst: "My",
       headingSecond: "education",
+      inProgress: "In progress",
       items: [
-        { title: "High school completed", detail: "Social Sciences and Humanities", year: "2023", icon: "school" },
-        { title: "Software Development Technician", detail: "In progress", year: "", icon: "code" },
+        { title: "High school completed", detail: "Completed secondary education with a focus on Social Sciences and Humanities in 2023.", year: "2023", icon: "school", image: "/images/secu.jpg", imageAlt: "Computer classroom during a lesson" },
+        { title: "Software Development Technician", detail: "Currently studying C#, .NET, Entity Framework, and Bootstrap.", year: "", icon: "code", image: "/images/prog.jpg", imageAlt: "Graduates celebrating the completion of their studies" },
       ],
     },
     contact: {
       eyebrow: "Let's talk",
       heading: ["Let's build", "something", "together"],
+      formHeading: "Send me a message",
       description: "I'm available for freelance projects and job opportunities in development teams. Let's talk about how I can contribute to your next project.",
       statusLabel: "Status",
       status: "Available",

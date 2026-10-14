@@ -173,6 +173,55 @@ body {
   mask-composite: intersect;
 }
 
+.tools-grid-texture {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.skills-marquee {
+  overflow: visible;
+  width: 100%;
+  padding-block: 18px;
+}
+
+.skills-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: skills-marquee-scroll 36s linear infinite;
+  will-change: transform;
+}
+
+.skills-marquee:hover .skills-marquee-track,
+.skills-marquee:focus-within .skills-marquee-track {
+  animation-play-state: paused;
+}
+
+.skills-marquee-list {
+  display: flex;
+  flex: none;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px 0 0;
+  list-style: none;
+}
+
+.tool-card {
+  flex: 0 0 clamp(116px, 13vw, 152px);
+  aspect-ratio: 1;
+  transform-origin: center;
+}
+
+@keyframes skills-marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+  .skills-marquee-track {
+    animation-duration: 30s;
+  }
+}
+
 /* Glow Hover */
 .glow-hover:hover {
   box-shadow: 0 0 20px rgba(165, 29, 63, 0.3);
@@ -299,7 +348,22 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .project-actions-menu,
-  .project-action-link {
+  .project-action-link,
+  .tool-card {
     animation: none;
+    transition: none;
+  }
+
+  .skills-marquee {
+    overflow-x: auto;
+  }
+
+  .skills-marquee-track {
+    animation: none;
+    will-change: auto;
+  }
+
+  .skills-marquee-list[aria-hidden="true"] {
+    display: none;
   }
 }
